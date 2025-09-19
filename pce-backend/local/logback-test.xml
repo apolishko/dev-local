@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Suppress ERROR logs from intentional test exceptions -->
+    <logger name="com.pearson.pce.api.AdminController" level="WARN"/>
+    <logger name="com.pearson.pce.api.GlobalExceptionHandler" level="WARN"/>
+    <logger name="com.pearson.pce.security.ProblemDetailAuthenticationEntryPoint" level="WARN"/>
+    <logger name="org.springframework.web" level="WARN"/>
+    <logger name="org.springframework.security" level="WARN"/>
+    <logger name="org.springframework.boot" level="WARN"/>
+
+    <!-- Keep application logs at INFO level -->
+    <logger name="com.pearson.pce" level="INFO"/>
+    
+    <!-- Show test results but suppress noise -->
+    <root level="WARN">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
