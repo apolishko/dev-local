@@ -1,0 +1,19 @@
+docker compose run --rm server npx tsc --noEmit
+docker compose run --rm server npx eslint src \
+  --ext .ts --ext .tsx \
+  --ignore-pattern 'src/{browser,graphics,viewer2d}/**' \
+  --ignore-pattern 'test/**' \
+  --format unix
+
+  docker compose run --rm server sh -c "
+    npx eslint \$(git diff --name-only --diff-filter=ACMRT HEAD~8 HEAD | grep -E '\\.(ts|tsx)$')
+  "
+
+Только staged (--cached):
+docker compose run --rm server sh -c "
+  npx eslint \$(git diff --cached --name-only --diff-filter=ACMRT HEAD | grep -E '\\.(ts|tsx)$')
+"
+Всё вместе (и staged, и unstaged)
+docker compose run --rm server sh -c "
+  npx eslint \$(git diff HEAD --name-only --diff-filter=ACMRT | grep -E '\\.(ts|tsx)$')
+"

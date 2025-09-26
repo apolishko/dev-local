@@ -1,0 +1,31 @@
+{
+  "type": "mp3",
+  "description": "Basic MP3 audio file for music, sound effects, and voice content",
+  "group": "audio",
+  "tags": [
+    "audio",
+    "mp3",
+    "media"
+  ],
+  "version": "1.0.0",
+  "status": "PUBLISHED",
+  "schema": {
+    "inputs": [
+      {
+        "id": "master",
+        "description": "Master MP3 audio file",
+        "required": true,
+        "isMaster": true,
+        "allowedMimeTypes": [
+          "audio/mpeg"
+        ],
+        "tags": [
+          "master",
+          "audio",
+          "mp3"
+        ]
+      }
+    ],
+    "variations": []
+  }
+}

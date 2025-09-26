@@ -1,0 +1,2575 @@
+openapi: 3.0.0
+paths:
+  /schemas:
+    post:
+      description: Creates a new asset schema definition
+      operationId: AssetSchemaController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAssetSchema"
+            examples:
+              basic:
+                value:
+                  type: image
+                  description: High-resolution image with multiple scaled variations for different
+                    display contexts
+                  group: image
+                  tags: &a4
+                    - image
+                    - media
+                    - high-res
+                  version: 1.0.0
+                  status: PUBLISHED
+                  schema: &a5
+                    inputs:
+                      - id: master
+                        description: High-resolution master image file
+                        required: true
+                        isMaster: true
+                        isPreview: false
+                        allowedMimeTypes:
+                          - image/jpeg
+                          - image/png
+                          - image/webp
+                          - image/tiff
+                          - image/bmp
+                        tags:
+                          - master
+                          - source
+                          - image
+                        constraints:
+                          - property: width
+                            min: 150
+                          - property: height
+                            min: 150
+                        properties:
+                          - &a1
+                            name: width
+                            type: number
+                            required: true
+                            description: Image width in pixels
+                          - &a2
+                            name: height
+                            type: number
+                            required: true
+                            description: Image height in pixels
+                    variations:
+                      - id: 1080h
+                        description: 1080px height scaled down image in AVIF format for desktop displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a1
+                          - *a2
+                          - &a3
+                            name: aspectRatio
+                            type: number
+                            required: true
+                            description: Image aspect ratio (width/height)
+                        tags:
+                          - scaled
+                          - 1080p
+                      - id: 720h
+                        description: 720px height scaled down image in AVIF format for tablet displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a1
+                          - *a2
+                          - *a3
+                        tags:
+                          - scaled
+                          - 720p
+                      - id: 480h
+                        description: 480px height scaled down image in AVIF format for mobile displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a1
+                          - *a2
+                          - *a3
+                        tags:
+                          - scaled
+                          - 480p
+                      - id: 150h
+                        description: 150px height thumbnail in AVIF format for NodeGraphEditor preview
+                        allowedMimeTypes:
+                          - image/avif
+                        required: false
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a1
+                          - *a2
+                          - *a3
+                        tags:
+                          - thumbnail
+                          - node-editor
+                          - avif
+                      - id: previewImage
+                        description: Preview image for user display (optional, only for specific nodes)
+                        allowedMimeTypes:
+                          - image/avif
+                          - image/webp
+                        required: false
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: true
+                        tags:
+                          - preview
+      responses:
+        "201":
+          description: Asset schema created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetSchema"
+              example:
+                id: 45da7a13-0e1d-4d20-aa03-de0bf1a5b8ec
+                type: image
+                description: High-resolution image with multiple scaled variations for different
+                  display contexts
+                group: image
+                tags: *a4
+                version: 1.0.0
+                status: PUBLISHED
+                schema: *a5
+                createdBy: user@indg.com
+                lastModifiedBy: user@indg.com
+                createdAt: 2025-05-03T17:00:00.000Z
+                lastModifiedAt: 2025-05-03T17:00:00.000Z
+      summary: Create asset schema
+      tags: &a9
+        - Asset Schemas
+  /schemas/{idOrType}:
+    get:
+      description: Retrieves an asset schema by ID or type slug
+      operationId: AssetSchemaController_getByIdOrType
+      parameters:
+        - name: idOrType
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Asset schema found successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetSchema"
+              example:
+                id: 45da7a13-0e1d-4d20-aa03-de0bf1a5b8ec
+                type: image
+                description: High-resolution image with multiple scaled variations for different
+                  display contexts
+                group: image
+                tags:
+                  - image
+                  - media
+                  - high-res
+                version: 1.0.0
+                status: PUBLISHED
+                schema:
+                  inputs:
+                    - id: master
+                      description: High-resolution master image file
+                      required: true
+                      isMaster: true
+                      isPreview: false
+                      allowedMimeTypes:
+                        - image/jpeg
+                        - image/png
+                        - image/webp
+                        - image/tiff
+                        - image/bmp
+                      tags:
+                        - master
+                        - source
+                        - image
+                      constraints:
+                        - property: width
+                          min: 150
+                        - property: height
+                          min: 150
+                      properties:
+                        - &a6
+                          name: width
+                          type: number
+                          required: true
+                          description: Image width in pixels
+                        - &a7
+                          name: height
+                          type: number
+                          required: true
+                          description: Image height in pixels
+                  variations:
+                    - id: 1080h
+                      description: 1080px height scaled down image in AVIF format for desktop displays
+                      allowedMimeTypes:
+                        - image/avif
+                      required: true
+                      autogen: false
+                      sourceInputIds:
+                        - master
+                      isPreview: false
+                      properties:
+                        - *a6
+                        - *a7
+                        - &a8
+                          name: aspectRatio
+                          type: number
+                          required: true
+                          description: Image aspect ratio (width/height)
+                      tags:
+                        - scaled
+                        - 1080p
+                    - id: 720h
+                      description: 720px height scaled down image in AVIF format for tablet displays
+                      allowedMimeTypes:
+                        - image/avif
+                      required: true
+                      autogen: false
+                      sourceInputIds:
+                        - master
+                      isPreview: false
+                      properties:
+                        - *a6
+                        - *a7
+                        - *a8
+                      tags:
+                        - scaled
+                        - 720p
+                    - id: 480h
+                      description: 480px height scaled down image in AVIF format for mobile displays
+                      allowedMimeTypes:
+                        - image/avif
+                      required: true
+                      autogen: false
+                      sourceInputIds:
+                        - master
+                      isPreview: false
+                      properties:
+                        - *a6
+                        - *a7
+                        - *a8
+                      tags:
+                        - scaled
+                        - 480p
+                    - id: 150h
+                      description: 150px height thumbnail in AVIF format for NodeGraphEditor preview
+                      allowedMimeTypes:
+                        - image/avif
+                      required: false
+                      autogen: false
+                      sourceInputIds:
+                        - master
+                      isPreview: false
+                      properties:
+                        - *a6
+                        - *a7
+                        - *a8
+                      tags:
+                        - thumbnail
+                        - node-editor
+                        - avif
+                    - id: previewImage
+                      description: Preview image for user display (optional, only for specific nodes)
+                      allowedMimeTypes:
+                        - image/avif
+                        - image/webp
+                      required: false
+                      autogen: false
+                      sourceInputIds:
+                        - master
+                      isPreview: true
+                      tags:
+                        - preview
+                createdBy: user@indg.com
+                lastModifiedBy: user@indg.com
+                createdAt: 2025-05-03T17:00:00.000Z
+                lastModifiedAt: 2025-05-03T17:00:00.000Z
+        "404":
+          description: Asset schema not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                errorId: c3d4e5f6-g7h8-9012-cdef-g23456789012
+                statusCode: 404
+                message: "AssetSchema not found: 664bfa2fc9d5cf001f812aa1"
+                error: Not Found
+                timestamp: 2025-07-03T18:30:00.000Z
+                path: /assets
+                context:
+                  tenantId: indg
+                  userEmail: user@indg.com
+                  requestId: req-98765-ghi
+      summary: Get asset schema
+      tags: *a9
+  /schemas/{id}:
+    put:
+      description: Updates an existing asset schema (endpoint subject to change or removal)
+      operationId: AssetSchemaController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAssetSchema"
+      responses:
+        "200":
+          description: Asset schema updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetSchema"
+              example:
+                id: 45da7a13-0e1d-4d20-aa03-de0bf1a5b8ec
+                type: image
+                description: High-resolution image with multiple scaled variations for different
+                  display contexts
+                group: image
+                tags:
+                  - image
+                  - media
+                  - high-res
+                version: 1.0.0
+                status: PUBLISHED
+                schema:
+                  inputs:
+                    - id: master
+                      description: High-resolution master image file
+                      required: true
+                      isMaster: true
+                      isPreview: false
+                      allowedMimeTypes:
+                        - image/jpeg
+                        - image/png
+                        - image/webp
+                        - image/tiff
+                        - image/bmp
+                      tags:
+                        - master
+                        - source
+                        - image
+                      constraints:
+                        - property: width
+                          min: 150
+                        - property: height
+                          min: 150
+                      properties:
+                        - &a10
+                          name: width
+                          type: number
+                          required: true
+                          description: Image width in pixels
+                        - &a11
+                          name: height
+                          type: number
+                          required: true
+                          description: Image height in pixels
+                  variations:
+                    - id: 1080h
+                      description: 1080px height scaled down image in AVIF format for desktop displays
+                      allowedMimeTypes:
+                        - image/avif
+                      required: true
+                      autogen: false
+                      sourceInputIds:
+                        - master
+                      isPreview: false
+                      properties:
+                        - *a10
+                        - *a11
+                        - &a12
+                          name: aspectRatio
+                          type: number
+                          required: true
+                          description: Image aspect ratio (width/height)
+                      tags:
+                        - scaled
+                        - 1080p
+                    - id: 720h
+                      description: 720px height scaled down image in AVIF format for tablet displays
+                      allowedMimeTypes:
+                        - image/avif
+                      required: true
+                      autogen: false
+                      sourceInputIds:
+                        - master
+                      isPreview: false
+                      properties:
+                        - *a10
+                        - *a11
+                        - *a12
+                      tags:
+                        - scaled
+                        - 720p
+                    - id: 480h
+                      description: 480px height scaled down image in AVIF format for mobile displays
+                      allowedMimeTypes:
+                        - image/avif
+                      required: true
+                      autogen: false
+                      sourceInputIds:
+                        - master
+                      isPreview: false
+                      properties:
+                        - *a10
+                        - *a11
+                        - *a12
+                      tags:
+                        - scaled
+                        - 480p
+                    - id: 150h
+                      description: 150px height thumbnail in AVIF format for NodeGraphEditor preview
+                      allowedMimeTypes:
+                        - image/avif
+                      required: false
+                      autogen: false
+                      sourceInputIds:
+                        - master
+                      isPreview: false
+                      properties:
+                        - *a10
+                        - *a11
+                        - *a12
+                      tags:
+                        - thumbnail
+                        - node-editor
+                        - avif
+                    - id: previewImage
+                      description: Preview image for user display (optional, only for specific nodes)
+                      allowedMimeTypes:
+                        - image/avif
+                        - image/webp
+                      required: false
+                      autogen: false
+                      sourceInputIds:
+                        - master
+                      isPreview: true
+                      tags:
+                        - preview
+                createdBy: user@indg.com
+                lastModifiedBy: user@indg.com
+                createdAt: 2025-05-03T17:00:00.000Z
+                lastModifiedAt: 2025-05-03T17:00:00.000Z
+        "404":
+          description: Asset schema not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                errorId: c3d4e5f6-g7h8-9012-cdef-g23456789012
+                statusCode: 404
+                message: "AssetSchema not found: 664bfa2fc9d5cf001f812aa1"
+                error: Not Found
+                timestamp: 2025-07-03T18:30:00.000Z
+                path: /assets
+                context:
+                  tenantId: indg
+                  userEmail: user@indg.com
+                  requestId: req-98765-ghi
+      summary: "[⚠️TODO - TBD] Update asset schema"
+      tags: *a9
+    delete:
+      description: Deletes an asset schema (endpoint subject to change or removal)
+      operationId: AssetSchemaController_delete
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Asset schema deleted successfully
+        "404":
+          description: Asset schema not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                errorId: c3d4e5f6-g7h8-9012-cdef-g23456789012
+                statusCode: 404
+                message: "AssetSchema not found: 664bfa2fc9d5cf001f812aa1"
+                error: Not Found
+                timestamp: 2025-07-03T18:30:00.000Z
+                path: /assets
+                context:
+                  tenantId: indg
+                  userEmail: user@indg.com
+                  requestId: req-98765-ghi
+      summary: "[⚠️TODO - TBD] Delete asset schema"
+      tags: *a9
+  /schemas/{idOrType}/request-upload:
+    post:
+      description: Generates pre-signed upload URLs for asset files based on schema
+        definition
+      operationId: AssetSchemaController_requestUpload
+      parameters:
+        - name: idOrType
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Upload URLs generated successfully
+          content:
+            application/json:
+              example:
+                uploadUrls:
+                  inputs:
+                    - id: master
+                      url: https://storage.azure.com/upload/master.png?signature=...
+                  variations:
+                    - id: 1080h
+                      url: https://storage.azure.com/upload/1080h.avif?signature=...
+                    - id: 720h
+                      url: https://storage.azure.com/upload/720h.avif?signature=...
+                    - id: 480h
+                      url: https://storage.azure.com/upload/480h.avif?signature=...
+                    - id: 150h
+                      url: https://storage.azure.com/upload/150h.avif?signature=...
+                    - id: previewImage
+                      url: https://storage.azure.com/upload/preview.avif?signature=...
+                schemaType: image
+                schema:
+                  id: 45da7a13-0e1d-4d20-aa03-de0bf1a5b8ec
+                  type: image
+                  description: High-resolution image with multiple scaled variations for different
+                    display contexts
+                  group: image
+                  tags:
+                    - image
+                    - media
+                    - high-res
+                  version: 1.0.0
+                  status: PUBLISHED
+                  schema:
+                    inputs:
+                      - id: master
+                        description: High-resolution master image file
+                        required: true
+                        isMaster: true
+                        isPreview: false
+                        allowedMimeTypes:
+                          - image/jpeg
+                          - image/png
+                          - image/webp
+                          - image/tiff
+                          - image/bmp
+                        tags:
+                          - master
+                          - source
+                          - image
+                        constraints:
+                          - property: width
+                            min: 150
+                          - property: height
+                            min: 150
+                        properties:
+                          - &a13
+                            name: width
+                            type: number
+                            required: true
+                            description: Image width in pixels
+                          - &a14
+                            name: height
+                            type: number
+                            required: true
+                            description: Image height in pixels
+                    variations:
+                      - id: 1080h
+                        description: 1080px height scaled down image in AVIF format for desktop displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a13
+                          - *a14
+                          - &a15
+                            name: aspectRatio
+                            type: number
+                            required: true
+                            description: Image aspect ratio (width/height)
+                        tags:
+                          - scaled
+                          - 1080p
+                      - id: 720h
+                        description: 720px height scaled down image in AVIF format for tablet displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a13
+                          - *a14
+                          - *a15
+                        tags:
+                          - scaled
+                          - 720p
+                      - id: 480h
+                        description: 480px height scaled down image in AVIF format for mobile displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a13
+                          - *a14
+                          - *a15
+                        tags:
+                          - scaled
+                          - 480p
+                      - id: 150h
+                        description: 150px height thumbnail in AVIF format for NodeGraphEditor preview
+                        allowedMimeTypes:
+                          - image/avif
+                        required: false
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a13
+                          - *a14
+                          - *a15
+                        tags:
+                          - thumbnail
+                          - node-editor
+                          - avif
+                      - id: previewImage
+                        description: Preview image for user display (optional, only for specific nodes)
+                        allowedMimeTypes:
+                          - image/avif
+                          - image/webp
+                        required: false
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: true
+                        tags:
+                          - preview
+                  createdBy: user@indg.com
+                  lastModifiedBy: user@indg.com
+                  createdAt: 2025-05-03T17:00:00.000Z
+                  lastModifiedAt: 2025-05-03T17:00:00.000Z
+        "404":
+          description: Asset schema not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                errorId: c3d4e5f6-g7h8-9012-cdef-g23456789012
+                statusCode: 404
+                message: "AssetSchema not found: 664bfa2fc9d5cf001f812aa1"
+                error: Not Found
+                timestamp: 2025-07-03T18:30:00.000Z
+                path: /assets
+                context:
+                  tenantId: indg
+                  userEmail: user@indg.com
+                  requestId: req-98765-ghi
+      summary: Request upload URLs
+      tags: *a9
+  /schemas/search:
+    post:
+      description: Search asset schemas using complex queries with pagination and sorting
+      operationId: AssetSchemaController_search
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchRequest"
+      responses:
+        "200":
+          description: Search results returned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AssetSchema"
+                  total:
+                    type: number
+                    example: 15
+                  offset:
+                    type: number
+                    example: 0
+                  limit:
+                    type: number
+                    example: 20
+      summary: Search asset schemas
+      tags: *a9
+  /assets:
+    post:
+      description: Creates a new asset based on an existing schema
+      operationId: AssetController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAsset"
+            examples:
+              basic:
+                value:
+                  schemaType: image
+                  group: image
+                  description: Product image for marketing campaign
+                  tags: &a19
+                    - generator_template_id:7ec1e0d3-71a4-4232-90dc-9a0b79c548ba
+                  files:
+                    inputs:
+                      - id: master
+                        url: https://storage.azure.com/assets/master.png
+                        properties: &a20
+                          width: 1920
+                          height: 1080
+                    variations:
+                      - id: 1080h
+                        url: https://storage.azure.com/assets/1080h.avif
+                        properties: &a21
+                          width: 1920
+                          height: 1080
+                          aspectRatio: 1.777777778
+                      - id: 720h
+                        url: https://storage.azure.com/assets/720h.avif
+                        properties: &a22
+                          width: 1280
+                          height: 720
+                          aspectRatio: 1.777777778
+                      - id: 480h
+                        url: https://storage.azure.com/assets/480h.avif
+                        properties: &a23
+                          width: 853
+                          height: 480
+                          aspectRatio: 1.777777778
+                      - id: 150h
+                        url: https://storage.azure.com/assets/150h.avif
+                        properties: &a24
+                          width: 267
+                          height: 150
+                          aspectRatio: 1.777777778
+                      - id: previewImage
+                        url: https://storage.azure.com/assets/preview.avif
+                        properties: &a25
+                          width: 512
+                          height: 288
+      responses:
+        "201":
+          description: Asset created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Asset"
+              example:
+                id: 43846397-404d-415c-b344-6f640b8373c1
+                tenant: indg
+                schemaType: image
+                schema:
+                  id: 45da7a13-0e1d-4d20-aa03-de0bf1a5b8ec
+                  type: image
+                  description: High-resolution image with multiple scaled variations for different
+                    display contexts
+                  group: image
+                  tags:
+                    - image
+                    - media
+                    - high-res
+                  version: 1.0.0
+                  status: PUBLISHED
+                  schema:
+                    inputs:
+                      - id: master
+                        description: High-resolution master image file
+                        required: true
+                        isMaster: true
+                        isPreview: false
+                        allowedMimeTypes:
+                          - image/jpeg
+                          - image/png
+                          - image/webp
+                          - image/tiff
+                          - image/bmp
+                        tags:
+                          - master
+                          - source
+                          - image
+                        constraints:
+                          - property: width
+                            min: 150
+                          - property: height
+                            min: 150
+                        properties:
+                          - &a16
+                            name: width
+                            type: number
+                            required: true
+                            description: Image width in pixels
+                          - &a17
+                            name: height
+                            type: number
+                            required: true
+                            description: Image height in pixels
+                    variations:
+                      - id: 1080h
+                        description: 1080px height scaled down image in AVIF format for desktop displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a16
+                          - *a17
+                          - &a18
+                            name: aspectRatio
+                            type: number
+                            required: true
+                            description: Image aspect ratio (width/height)
+                        tags:
+                          - scaled
+                          - 1080p
+                      - id: 720h
+                        description: 720px height scaled down image in AVIF format for tablet displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a16
+                          - *a17
+                          - *a18
+                        tags:
+                          - scaled
+                          - 720p
+                      - id: 480h
+                        description: 480px height scaled down image in AVIF format for mobile displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a16
+                          - *a17
+                          - *a18
+                        tags:
+                          - scaled
+                          - 480p
+                      - id: 150h
+                        description: 150px height thumbnail in AVIF format for NodeGraphEditor preview
+                        allowedMimeTypes:
+                          - image/avif
+                        required: false
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a16
+                          - *a17
+                          - *a18
+                        tags:
+                          - thumbnail
+                          - node-editor
+                          - avif
+                      - id: previewImage
+                        description: Preview image for user display (optional, only for specific nodes)
+                        allowedMimeTypes:
+                          - image/avif
+                          - image/webp
+                        required: false
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: true
+                        tags:
+                          - preview
+                  createdBy: user@indg.com
+                  lastModifiedBy: user@indg.com
+                  createdAt: 2025-05-03T17:00:00.000Z
+                  lastModifiedAt: 2025-05-03T17:00:00.000Z
+                group: image
+                description: Product image for marketing campaign
+                tags: *a19
+                files:
+                  inputs:
+                    - id: master
+                      url: https://storage.azure.com/assets/master.png
+                      mimeType: image/png
+                      sizeBytes: 2048576
+                      isMaster: true
+                      autogen: false
+                      isPreview: false
+                      required: true
+                      properties: *a20
+                  variations:
+                    - id: 1080h
+                      url: https://storage.azure.com/assets/1080h.avif
+                      mimeType: image/avif
+                      sizeBytes: 342195
+                      isMaster: false
+                      autogen: true
+                      isPreview: false
+                      required: true
+                      properties: *a21
+                    - id: 720h
+                      url: https://storage.azure.com/assets/720h.avif
+                      mimeType: image/avif
+                      sizeBytes: 221503
+                      isMaster: false
+                      autogen: true
+                      isPreview: false
+                      required: true
+                      properties: *a22
+                    - id: 480h
+                      url: https://storage.azure.com/assets/480h.avif
+                      mimeType: image/avif
+                      sizeBytes: 98756
+                      isMaster: false
+                      autogen: true
+                      isPreview: false
+                      required: true
+                      properties: *a23
+                    - id: 150h
+                      url: https://storage.azure.com/assets/150h.avif
+                      mimeType: image/avif
+                      sizeBytes: 45123
+                      isMaster: false
+                      autogen: true
+                      isPreview: false
+                      required: false
+                      properties: *a24
+                    - id: previewImage
+                      url: https://storage.azure.com/assets/preview.avif
+                      mimeType: image/avif
+                      sizeBytes: 35678
+                      isMaster: false
+                      autogen: true
+                      isPreview: true
+                      required: false
+                      properties: *a25
+                status: READY
+                createdBy: user@indg.com
+                lastModifiedBy: user@indg.com
+                createdAt: 2025-05-03T17:30:00.000Z
+                lastModifiedAt: 2025-05-03T17:30:00.000Z
+        "400":
+          description: Asset validation failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                errorId: b2c3d4e5-f6g7-8901-bcde-f12345678901
+                statusCode: 400
+                message:
+                  - Field "schemaType" is required
+                  - Field "files" must be an object
+                error: Bad Request
+                timestamp: 2025-07-03T18:30:00.000Z
+                path: /assets
+                context:
+                  tenantId: indg
+                  userEmail: user@indg.com
+                  requestId: req-67890-def
+        "404":
+          description: Asset schema not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                errorId: c3d4e5f6-g7h8-9012-cdef-g23456789012
+                statusCode: 404
+                message: "AssetSchema not found: 664bfa2fc9d5cf001f812aa1"
+                error: Not Found
+                timestamp: 2025-07-03T18:30:00.000Z
+                path: /assets
+                context:
+                  tenantId: indg
+                  userEmail: user@indg.com
+                  requestId: req-98765-ghi
+      summary: Create a new asset
+      tags: &a29
+        - Assets
+  /assets/{id}:
+    get:
+      description: Retrieves a specific asset by its ID
+      operationId: AssetController_getById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Asset found successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Asset"
+              example:
+                id: 43846397-404d-415c-b344-6f640b8373c1
+                tenant: indg
+                schemaType: image
+                schema:
+                  id: 45da7a13-0e1d-4d20-aa03-de0bf1a5b8ec
+                  type: image
+                  description: High-resolution image with multiple scaled variations for different
+                    display contexts
+                  group: image
+                  tags:
+                    - image
+                    - media
+                    - high-res
+                  version: 1.0.0
+                  status: PUBLISHED
+                  schema:
+                    inputs:
+                      - id: master
+                        description: High-resolution master image file
+                        required: true
+                        isMaster: true
+                        isPreview: false
+                        allowedMimeTypes:
+                          - image/jpeg
+                          - image/png
+                          - image/webp
+                          - image/tiff
+                          - image/bmp
+                        tags:
+                          - master
+                          - source
+                          - image
+                        constraints:
+                          - property: width
+                            min: 150
+                          - property: height
+                            min: 150
+                        properties:
+                          - &a26
+                            name: width
+                            type: number
+                            required: true
+                            description: Image width in pixels
+                          - &a27
+                            name: height
+                            type: number
+                            required: true
+                            description: Image height in pixels
+                    variations:
+                      - id: 1080h
+                        description: 1080px height scaled down image in AVIF format for desktop displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a26
+                          - *a27
+                          - &a28
+                            name: aspectRatio
+                            type: number
+                            required: true
+                            description: Image aspect ratio (width/height)
+                        tags:
+                          - scaled
+                          - 1080p
+                      - id: 720h
+                        description: 720px height scaled down image in AVIF format for tablet displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a26
+                          - *a27
+                          - *a28
+                        tags:
+                          - scaled
+                          - 720p
+                      - id: 480h
+                        description: 480px height scaled down image in AVIF format for mobile displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a26
+                          - *a27
+                          - *a28
+                        tags:
+                          - scaled
+                          - 480p
+                      - id: 150h
+                        description: 150px height thumbnail in AVIF format for NodeGraphEditor preview
+                        allowedMimeTypes:
+                          - image/avif
+                        required: false
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a26
+                          - *a27
+                          - *a28
+                        tags:
+                          - thumbnail
+                          - node-editor
+                          - avif
+                      - id: previewImage
+                        description: Preview image for user display (optional, only for specific nodes)
+                        allowedMimeTypes:
+                          - image/avif
+                          - image/webp
+                        required: false
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: true
+                        tags:
+                          - preview
+                  createdBy: user@indg.com
+                  lastModifiedBy: user@indg.com
+                  createdAt: 2025-05-03T17:00:00.000Z
+                  lastModifiedAt: 2025-05-03T17:00:00.000Z
+                group: image
+                description: Product image for marketing campaign
+                tags:
+                  - generator_template_id:7ec1e0d3-71a4-4232-90dc-9a0b79c548ba
+                files:
+                  inputs:
+                    - id: master
+                      url: https://storage.azure.com/assets/master.png
+                      mimeType: image/png
+                      sizeBytes: 2048576
+                      isMaster: true
+                      autogen: false
+                      isPreview: false
+                      required: true
+                      properties:
+                        width: 1920
+                        height: 1080
+                  variations:
+                    - id: 1080h
+                      url: https://storage.azure.com/assets/1080h.avif
+                      mimeType: image/avif
+                      sizeBytes: 342195
+                      isMaster: false
+                      autogen: true
+                      isPreview: false
+                      required: true
+                      properties:
+                        width: 1920
+                        height: 1080
+                        aspectRatio: 1.777777778
+                    - id: 720h
+                      url: https://storage.azure.com/assets/720h.avif
+                      mimeType: image/avif
+                      sizeBytes: 221503
+                      isMaster: false
+                      autogen: true
+                      isPreview: false
+                      required: true
+                      properties:
+                        width: 1280
+                        height: 720
+                        aspectRatio: 1.777777778
+                    - id: 480h
+                      url: https://storage.azure.com/assets/480h.avif
+                      mimeType: image/avif
+                      sizeBytes: 98756
+                      isMaster: false
+                      autogen: true
+                      isPreview: false
+                      required: true
+                      properties:
+                        width: 853
+                        height: 480
+                        aspectRatio: 1.777777778
+                    - id: 150h
+                      url: https://storage.azure.com/assets/150h.avif
+                      mimeType: image/avif
+                      sizeBytes: 45123
+                      isMaster: false
+                      autogen: true
+                      isPreview: false
+                      required: false
+                      properties:
+                        width: 267
+                        height: 150
+                        aspectRatio: 1.777777778
+                    - id: previewImage
+                      url: https://storage.azure.com/assets/preview.avif
+                      mimeType: image/avif
+                      sizeBytes: 35678
+                      isMaster: false
+                      autogen: true
+                      isPreview: true
+                      required: false
+                      properties:
+                        width: 512
+                        height: 288
+                status: READY
+                createdBy: user@indg.com
+                lastModifiedBy: user@indg.com
+                createdAt: 2025-05-03T17:30:00.000Z
+                lastModifiedAt: 2025-05-03T17:30:00.000Z
+        "404":
+          description: Asset not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                errorId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                statusCode: 404
+                message: Asset not found
+                error: Not Found
+                timestamp: 2025-07-03T18:30:00.000Z
+                path: /assets/invalid-id
+                context:
+                  tenantId: indg
+                  userEmail: user@indg.com
+                  requestId: req-12345-abc
+      summary: Get asset by ID
+      tags: *a29
+    put:
+      description: Updates an existing asset (endpoint subject to change or removal)
+      operationId: AssetController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAsset"
+      responses:
+        "200":
+          description: Asset updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Asset"
+              example:
+                id: 43846397-404d-415c-b344-6f640b8373c1
+                tenant: indg
+                schemaType: image
+                schema:
+                  id: 45da7a13-0e1d-4d20-aa03-de0bf1a5b8ec
+                  type: image
+                  description: High-resolution image with multiple scaled variations for different
+                    display contexts
+                  group: image
+                  tags:
+                    - image
+                    - media
+                    - high-res
+                  version: 1.0.0
+                  status: PUBLISHED
+                  schema:
+                    inputs:
+                      - id: master
+                        description: High-resolution master image file
+                        required: true
+                        isMaster: true
+                        isPreview: false
+                        allowedMimeTypes:
+                          - image/jpeg
+                          - image/png
+                          - image/webp
+                          - image/tiff
+                          - image/bmp
+                        tags:
+                          - master
+                          - source
+                          - image
+                        constraints:
+                          - property: width
+                            min: 150
+                          - property: height
+                            min: 150
+                        properties:
+                          - &a30
+                            name: width
+                            type: number
+                            required: true
+                            description: Image width in pixels
+                          - &a31
+                            name: height
+                            type: number
+                            required: true
+                            description: Image height in pixels
+                    variations:
+                      - id: 1080h
+                        description: 1080px height scaled down image in AVIF format for desktop displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a30
+                          - *a31
+                          - &a32
+                            name: aspectRatio
+                            type: number
+                            required: true
+                            description: Image aspect ratio (width/height)
+                        tags:
+                          - scaled
+                          - 1080p
+                      - id: 720h
+                        description: 720px height scaled down image in AVIF format for tablet displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a30
+                          - *a31
+                          - *a32
+                        tags:
+                          - scaled
+                          - 720p
+                      - id: 480h
+                        description: 480px height scaled down image in AVIF format for mobile displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a30
+                          - *a31
+                          - *a32
+                        tags:
+                          - scaled
+                          - 480p
+                      - id: 150h
+                        description: 150px height thumbnail in AVIF format for NodeGraphEditor preview
+                        allowedMimeTypes:
+                          - image/avif
+                        required: false
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a30
+                          - *a31
+                          - *a32
+                        tags:
+                          - thumbnail
+                          - node-editor
+                          - avif
+                      - id: previewImage
+                        description: Preview image for user display (optional, only for specific nodes)
+                        allowedMimeTypes:
+                          - image/avif
+                          - image/webp
+                        required: false
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: true
+                        tags:
+                          - preview
+                  createdBy: user@indg.com
+                  lastModifiedBy: user@indg.com
+                  createdAt: 2025-05-03T17:00:00.000Z
+                  lastModifiedAt: 2025-05-03T17:00:00.000Z
+                group: image
+                description: Product image for marketing campaign
+                tags:
+                  - generator_template_id:7ec1e0d3-71a4-4232-90dc-9a0b79c548ba
+                files:
+                  inputs:
+                    - id: master
+                      url: https://storage.azure.com/assets/master.png
+                      mimeType: image/png
+                      sizeBytes: 2048576
+                      isMaster: true
+                      autogen: false
+                      isPreview: false
+                      required: true
+                      properties:
+                        width: 1920
+                        height: 1080
+                  variations:
+                    - id: 1080h
+                      url: https://storage.azure.com/assets/1080h.avif
+                      mimeType: image/avif
+                      sizeBytes: 342195
+                      isMaster: false
+                      autogen: true
+                      isPreview: false
+                      required: true
+                      properties:
+                        width: 1920
+                        height: 1080
+                        aspectRatio: 1.777777778
+                    - id: 720h
+                      url: https://storage.azure.com/assets/720h.avif
+                      mimeType: image/avif
+                      sizeBytes: 221503
+                      isMaster: false
+                      autogen: true
+                      isPreview: false
+                      required: true
+                      properties:
+                        width: 1280
+                        height: 720
+                        aspectRatio: 1.777777778
+                    - id: 480h
+                      url: https://storage.azure.com/assets/480h.avif
+                      mimeType: image/avif
+                      sizeBytes: 98756
+                      isMaster: false
+                      autogen: true
+                      isPreview: false
+                      required: true
+                      properties:
+                        width: 853
+                        height: 480
+                        aspectRatio: 1.777777778
+                    - id: 150h
+                      url: https://storage.azure.com/assets/150h.avif
+                      mimeType: image/avif
+                      sizeBytes: 45123
+                      isMaster: false
+                      autogen: true
+                      isPreview: false
+                      required: false
+                      properties:
+                        width: 267
+                        height: 150
+                        aspectRatio: 1.777777778
+                    - id: previewImage
+                      url: https://storage.azure.com/assets/preview.avif
+                      mimeType: image/avif
+                      sizeBytes: 35678
+                      isMaster: false
+                      autogen: true
+                      isPreview: true
+                      required: false
+                      properties:
+                        width: 512
+                        height: 288
+                status: READY
+                createdBy: user@indg.com
+                lastModifiedBy: user@indg.com
+                createdAt: 2025-05-03T17:30:00.000Z
+                lastModifiedAt: 2025-05-03T17:30:00.000Z
+        "404":
+          description: Asset not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                errorId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                statusCode: 404
+                message: Asset not found
+                error: Not Found
+                timestamp: 2025-07-03T18:30:00.000Z
+                path: /assets/invalid-id
+                context:
+                  tenantId: indg
+                  userEmail: user@indg.com
+                  requestId: req-12345-abc
+      summary: "[⚠️TODO - TBD] Update asset"
+      tags: *a29
+    delete:
+      description: Deletes an asset and all its files (endpoint subject to change or
+        removal)
+      operationId: AssetController_delete
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Asset deleted successfully
+        "404":
+          description: Asset not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                errorId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                statusCode: 404
+                message: Asset not found
+                error: Not Found
+                timestamp: 2025-07-03T18:30:00.000Z
+                path: /assets/invalid-id
+                context:
+                  tenantId: indg
+                  userEmail: user@indg.com
+                  requestId: req-12345-abc
+      summary: "[⚠️TODO - TBD] Delete asset"
+      tags: *a29
+  /assets/{id}/status:
+    put:
+      description: Changes the status of an asset (e.g. deprecate)
+      operationId: AssetController_changeStatus
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangeAssetStatus"
+      responses:
+        "200":
+          description: Asset status changed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Asset"
+              example:
+                id: 43846397-404d-415c-b344-6f640b8373c1
+                tenant: indg
+                schemaType: image
+                schema:
+                  id: 45da7a13-0e1d-4d20-aa03-de0bf1a5b8ec
+                  type: image
+                  description: High-resolution image with multiple scaled variations for different
+                    display contexts
+                  group: image
+                  tags:
+                    - image
+                    - media
+                    - high-res
+                  version: 1.0.0
+                  status: PUBLISHED
+                  schema:
+                    inputs:
+                      - id: master
+                        description: High-resolution master image file
+                        required: true
+                        isMaster: true
+                        isPreview: false
+                        allowedMimeTypes:
+                          - image/jpeg
+                          - image/png
+                          - image/webp
+                          - image/tiff
+                          - image/bmp
+                        tags:
+                          - master
+                          - source
+                          - image
+                        constraints:
+                          - property: width
+                            min: 150
+                          - property: height
+                            min: 150
+                        properties:
+                          - &a33
+                            name: width
+                            type: number
+                            required: true
+                            description: Image width in pixels
+                          - &a34
+                            name: height
+                            type: number
+                            required: true
+                            description: Image height in pixels
+                    variations:
+                      - id: 1080h
+                        description: 1080px height scaled down image in AVIF format for desktop displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a33
+                          - *a34
+                          - &a35
+                            name: aspectRatio
+                            type: number
+                            required: true
+                            description: Image aspect ratio (width/height)
+                        tags:
+                          - scaled
+                          - 1080p
+                      - id: 720h
+                        description: 720px height scaled down image in AVIF format for tablet displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a33
+                          - *a34
+                          - *a35
+                        tags:
+                          - scaled
+                          - 720p
+                      - id: 480h
+                        description: 480px height scaled down image in AVIF format for mobile displays
+                        allowedMimeTypes:
+                          - image/avif
+                        required: true
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a33
+                          - *a34
+                          - *a35
+                        tags:
+                          - scaled
+                          - 480p
+                      - id: 150h
+                        description: 150px height thumbnail in AVIF format for NodeGraphEditor preview
+                        allowedMimeTypes:
+                          - image/avif
+                        required: false
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: false
+                        properties:
+                          - *a33
+                          - *a34
+                          - *a35
+                        tags:
+                          - thumbnail
+                          - node-editor
+                          - avif
+                      - id: previewImage
+                        description: Preview image for user display (optional, only for specific nodes)
+                        allowedMimeTypes:
+                          - image/avif
+                          - image/webp
+                        required: false
+                        autogen: false
+                        sourceInputIds:
+                          - master
+                        isPreview: true
+                        tags:
+                          - preview
+                  createdBy: user@indg.com
+                  lastModifiedBy: user@indg.com
+                  createdAt: 2025-05-03T17:00:00.000Z
+                  lastModifiedAt: 2025-05-03T17:00:00.000Z
+                group: image
+                description: Product image for marketing campaign
+                tags:
+                  - generator_template_id:7ec1e0d3-71a4-4232-90dc-9a0b79c548ba
+                files:
+                  inputs:
+                    - id: master
+                      url: https://storage.azure.com/assets/master.png
+                      mimeType: image/png
+                      sizeBytes: 2048576
+                      isMaster: true
+                      autogen: false
+                      isPreview: false
+                      required: true
+                      properties:
+                        width: 1920
+                        height: 1080
+                  variations:
+                    - id: 1080h
+                      url: https://storage.azure.com/assets/1080h.avif
+                      mimeType: image/avif
+                      sizeBytes: 342195
+                      isMaster: false
+                      autogen: true
+                      isPreview: false
+                      required: true
+                      properties:
+                        width: 1920
+                        height: 1080
+                        aspectRatio: 1.777777778
+                    - id: 720h
+                      url: https://storage.azure.com/assets/720h.avif
+                      mimeType: image/avif
+                      sizeBytes: 221503
+                      isMaster: false
+                      autogen: true
+                      isPreview: false
+                      required: true
+                      properties:
+                        width: 1280
+                        height: 720
+                        aspectRatio: 1.777777778
+                    - id: 480h
+                      url: https://storage.azure.com/assets/480h.avif
+                      mimeType: image/avif
+                      sizeBytes: 98756
+                      isMaster: false
+                      autogen: true
+                      isPreview: false
+                      required: true
+                      properties:
+                        width: 853
+                        height: 480
+                        aspectRatio: 1.777777778
+                    - id: 150h
+                      url: https://storage.azure.com/assets/150h.avif
+                      mimeType: image/avif
+                      sizeBytes: 45123
+                      isMaster: false
+                      autogen: true
+                      isPreview: false
+                      required: false
+                      properties:
+                        width: 267
+                        height: 150
+                        aspectRatio: 1.777777778
+                    - id: previewImage
+                      url: https://storage.azure.com/assets/preview.avif
+                      mimeType: image/avif
+                      sizeBytes: 35678
+                      isMaster: false
+                      autogen: true
+                      isPreview: true
+                      required: false
+                      properties:
+                        width: 512
+                        height: 288
+                status: READY
+                createdBy: user@indg.com
+                lastModifiedBy: user@indg.com
+                createdAt: 2025-05-03T17:30:00.000Z
+                lastModifiedAt: 2025-05-03T17:30:00.000Z
+        "400":
+          description: Invalid status transition
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Asset not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                errorId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                statusCode: 404
+                message: Asset not found
+                error: Not Found
+                timestamp: 2025-07-03T18:30:00.000Z
+                path: /assets/invalid-id
+                context:
+                  tenantId: indg
+                  userEmail: user@indg.com
+                  requestId: req-12345-abc
+      summary: Change asset status
+      tags: *a29
+  /assets/search:
+    post:
+      description: Search assets using complex queries with pagination and sorting
+      operationId: AssetController_search
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchRequest"
+      responses:
+        "200":
+          description: Search results returned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Asset"
+                  total:
+                    type: number
+                    example: 42
+                  offset:
+                    type: number
+                    example: 0
+                  limit:
+                    type: number
+                    example: 20
+      summary: Search assets
+      tags: *a29
+info:
+  title: Asset Management System (AMS/Freya) API
+  description: ""
+  version: 1.0.0
+  contact: {}
+tags: []
+servers: []
+components:
+  securitySchemes:
+    TenantAuth:
+      type: apiKey
+      in: header
+      name: x-tenant-id
+    UserAuth:
+      type: apiKey
+      in: header
+      name: x-user-email
+  schemas:
+    ErrorRequestContext:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          description: Tenant identifier
+        userEmail:
+          type: string
+          description: User who made the request
+        requestId:
+          type: string
+          description: Request correlation ID
+      required:
+        - tenantId
+        - userEmail
+        - requestId
+    ErrorResponse:
+      type: object
+      properties:
+        errorId:
+          type: string
+          description: Unique error identifier for tracking
+        statusCode:
+          type: number
+          description: HTTP status code
+        message:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+          description: Error message(s) - string for single errors, array for validation
+            errors
+        error:
+          type: string
+          description: Error type or category
+        timestamp:
+          type: string
+          description: When the error occurred
+          format: date-time
+        path:
+          type: string
+          description: Request path where error occurred
+        context:
+          description: Request context information
+          allOf:
+            - $ref: "#/components/schemas/ErrorRequestContext"
+      required:
+        - errorId
+        - statusCode
+        - message
+        - error
+        - timestamp
+        - path
+    PropertyDefinition:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Property name from known property names
+        type:
+          type: string
+          enum:
+            - string
+            - number
+            - boolean
+          description: Property data type
+        required:
+          type: boolean
+          description: Whether this property is required
+        description:
+          type: string
+          description: Property description
+      required:
+        - name
+        - type
+        - required
+    PropertyConstraint:
+      type: object
+      properties:
+        property:
+          type: string
+          description: Property name from known property names
+        min:
+          type: number
+          description: Minimum value for numeric properties
+        max:
+          type: number
+          description: Maximum value for numeric properties
+      required:
+        - property
+    SchemaInput:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+        description:
+          type: string
+          description: Human-readable description
+        allowedMimeTypes:
+          description: Allowed MIME types
+          type: array
+          items:
+            type: string
+        required:
+          type: boolean
+          description: Whether this item is required
+        isPreview:
+          type: boolean
+          description: Whether this item should be used for preview
+        tags:
+          description: Tags for categorization
+          type: array
+          items:
+            type: string
+        properties:
+          description: Property definitions
+          type: array
+          items:
+            $ref: "#/components/schemas/PropertyDefinition"
+        isMaster:
+          type: boolean
+          description: Whether this is the master input. IMPORTANT - you must have at
+            least one and only one master input!
+        constraints:
+          description: Validation constraints
+          type: array
+          items:
+            $ref: "#/components/schemas/PropertyConstraint"
+      required:
+        - id
+        - allowedMimeTypes
+    SchemaVariation:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+        description:
+          type: string
+          description: Human-readable description
+        allowedMimeTypes:
+          description: Allowed MIME types
+          type: array
+          items:
+            type: string
+        required:
+          type: boolean
+          description: Whether this item is required
+        isPreview:
+          type: boolean
+          description: Whether this item should be used for preview
+        tags:
+          description: Tags for categorization
+          type: array
+          items:
+            type: string
+        properties:
+          description: Property definitions
+          type: array
+          items:
+            $ref: "#/components/schemas/PropertyDefinition"
+        autogen:
+          type: boolean
+          description: Whether this variation is auto-generated
+        sourceInputIds:
+          description: Input IDs used to generate this variation
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - allowedMimeTypes
+    AssetSchemaDefinition:
+      type: object
+      properties:
+        inputs:
+          description: List of expected input files
+          type: array
+          items:
+            $ref: "#/components/schemas/SchemaInput"
+        variations:
+          description: List of output variations
+          type: array
+          items:
+            $ref: "#/components/schemas/SchemaVariation"
+      required:
+        - inputs
+    CreateAssetSchema:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Unique schema type identifier
+        description:
+          type: string
+          description: Human-readable description
+        group:
+          type: string
+          description: Schema group (image, video, document, etc.)
+        tags:
+          description: Tags for categorization
+          type: array
+          items:
+            type: string
+        version:
+          type: string
+          description: Schema version
+        status:
+          type: string
+          enum: &a36
+            - DRAFT
+            - PUBLISHED
+            - ARCHIVED
+          description: Schema status
+        schema:
+          description: Schema definition with inputs and variations
+          allOf:
+            - $ref: "#/components/schemas/AssetSchemaDefinition"
+      required:
+        - type
+        - group
+        - version
+        - status
+        - schema
+    AssetSchema:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Asset Schema (unique)
+        type:
+          type: string
+          description: Unique schema type identifier
+        description:
+          type: string
+          description: Human-readable description
+        group:
+          type: string
+          description: Schema group (image, video, document, etc.)
+        tags:
+          description: Tags for categorization
+          type: array
+          items:
+            type: string
+        version:
+          type: string
+          description: Schema version
+        status:
+          type: string
+          enum: *a36
+          description: Schema status
+        schema:
+          description: Schema definition with inputs and variations
+          allOf:
+            - $ref: "#/components/schemas/AssetSchemaDefinition"
+        createdBy:
+          type: string
+          description: User who created this schema
+        createdAt:
+          format: date-time
+          type: string
+          description: Schema creation timestamp
+        lastModifiedAt:
+          format: date-time
+          type: string
+          description: Last modification timestamp
+        lastModifiedBy:
+          type: string
+          description: User who last modified this schema
+      required:
+        - _id
+        - type
+        - group
+        - version
+        - status
+        - schema
+        - createdBy
+        - createdAt
+        - lastModifiedAt
+        - lastModifiedBy
+    UpdateAssetSchema:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Asset Schema (unique)
+        description:
+          type: string
+          description: Human-readable description
+        group:
+          type: string
+          description: Schema group (image, video, document, etc.)
+        tags:
+          description: Tags for categorization
+          type: array
+          items:
+            type: string
+        version:
+          type: string
+          description: Schema version
+        status:
+          type: string
+          enum: *a36
+          description: Schema status
+        schema:
+          description: Schema definition with inputs and variations
+          allOf:
+            - $ref: "#/components/schemas/AssetSchemaDefinition"
+    Sort:
+      type: object
+      properties:
+        field:
+          type: string
+          example: createdAt
+          description: Field name to sort by
+        dir:
+          type: string
+          enum:
+            - ASC
+            - DESC
+          example: DESC
+          description: Sort direction
+      required:
+        - field
+    SearchRequest:
+      type: object
+      properties:
+        offset:
+          type: number
+          example: 0
+          description: Number of results to skip
+        limit:
+          type: number
+          example: 20
+          minimum: 1
+          maximum: 1000
+          description: Number of results to return
+        sort:
+          description: Sort criteria
+          type: array
+          items:
+            $ref: "#/components/schemas/Sort"
+        query:
+          type: object
+          description: Complex query object with logical operators and predicates
+          example:
+            logical: and
+            predicates:
+              - field: type
+                operator: startsWith
+                value: image
+              - field: description
+                operator: contains
+                value: resolution
+              - field: description
+                operator: notContains
+                value: deprecated
+              - field: group
+                operator: endsWith
+                value: image
+              - field: status
+                operator: equals
+                value: published
+              - field: status
+                operator: notEquals
+                value: archived
+              - field: group
+                operator: in
+                value:
+                  - image
+                  - video
+              - field: version
+                operator: gte
+                value: 1.0.0
+              - field: createdAt
+                operator: between
+                value:
+                  - 2025-01-01
+                  - 2025-12-31
+              - field: description
+                operator: isNotNull
+              - field: tags
+                operator: arrayContainsAny
+                value:
+                  - image
+                  - media
+              - field: tags
+                operator: arrayContainsAll
+                value:
+                  - high-res
+                  - image
+              - logical: or
+                predicates:
+                  - field: createdBy
+                    operator: equals
+                    value: admin@indg.com
+                  - field: lastModifiedBy
+                    operator: equals
+                    value: admin@indg.com
+        fields:
+          description: Fields to include in response
+          type: array
+          items:
+            type: string
+    FileProperties:
+      type: object
+      properties:
+        width:
+          type: number
+          description: Image width in pixels
+        height:
+          type: number
+          description: Image height in pixels
+        colorDepth:
+          type: number
+          description: Color depth in bits
+        aspectRatio:
+          type: number
+          description: Aspect ratio (width/height)
+        colorSpace:
+          type: string
+          description: Color space (sRGB, Adobe RGB, etc.)
+        hasAlpha:
+          type: boolean
+          description: Whether image has alpha/transparency channel
+    AssetFileInput:
+      type: object
+      properties:
+        id:
+          type: string
+          example: master
+          description: File identifier matching schema input/variation ID
+        url:
+          type: string
+          example: https://storage.azure.com/assets/master.png
+          description: File upload URL
+        properties:
+          description: File metadata properties (width, height, etc.)
+          example:
+            width: 1920
+            height: 1080
+            hasAlpha: false
+            sizeBytes: 1024000
+          allOf:
+            - $ref: "#/components/schemas/FileProperties"
+      required:
+        - id
+        - url
+    AssetFilesInput:
+      type: object
+      properties:
+        inputs:
+          description: Array of input file uploads
+          type: array
+          items:
+            $ref: "#/components/schemas/AssetFileInput"
+        variations:
+          description: Array of variation file uploads
+          type: array
+          items:
+            $ref: "#/components/schemas/AssetFileInput"
+      required:
+        - inputs
+        - variations
+    CreateAsset:
+      type: object
+      properties:
+        schemaType:
+          type: string
+          description: Asset schema type reference
+        group:
+          type: string
+          description: Asset group (image, video, document, etc.)
+        description:
+          type: string
+          description: Human-readable description of the asset instance
+        tags:
+          description: Asset tags for categorization
+          type: array
+          items:
+            type: string
+        reason:
+          type: string
+          description: Reason for status change (e.g. deprecation reason)
+        files:
+          description: Asset files with upload URLs
+          allOf:
+            - $ref: "#/components/schemas/AssetFilesInput"
+      required:
+        - schemaType
+        - group
+        - tags
+        - files
+    AssetFile:
+      type: object
+      properties:
+        id:
+          type: string
+          description: File identifier
+        url:
+          type: string
+          description: File URL
+        mimeType:
+          type: string
+          description: MIME type of the file
+        sizeBytes:
+          type: number
+          description: File size in bytes
+        isMaster:
+          type: boolean
+          description: Whether this is the master/source file
+        autogen:
+          type: boolean
+          description: Whether this file was auto-generated
+        isPreview:
+          type: boolean
+          description: Whether this file is used for preview
+        required:
+          type: boolean
+          description: Whether this file is required
+        properties:
+          description: File metadata properties
+          allOf:
+            - $ref: "#/components/schemas/FileProperties"
+      required:
+        - id
+        - url
+        - mimeType
+        - sizeBytes
+        - isMaster
+        - autogen
+        - isPreview
+        - required
+    AssetFiles:
+      type: object
+      properties:
+        inputs:
+          description: Array of input file references
+          type: array
+          items:
+            $ref: "#/components/schemas/AssetFile"
+        variations:
+          description: Array of variation file references
+          type: array
+          items:
+            $ref: "#/components/schemas/AssetFile"
+      required:
+        - inputs
+        - variations
+    Asset:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Asset ID (unique)
+        schemaType:
+          type: string
+          description: Asset schema type reference
+        schema:
+          type: object
+          description: Asset schema definition snapshot
+        group:
+          type: string
+          description: Asset group (image, video, document, etc.)
+        description:
+          type: string
+          description: Human-readable description of the asset instance
+        tags:
+          description: Asset tags for categorization
+          type: array
+          items:
+            type: string
+        files:
+          description: Asset files with inputs and variations
+          allOf:
+            - $ref: "#/components/schemas/AssetFiles"
+        tenant:
+          type: string
+          description: Tenant identifier
+        status:
+          type: string
+          enum:
+            - PENDING
+            - READY
+            - FAILED
+            - DEPRECATED
+          description: Asset processing status
+        reason:
+          type: string
+          description: Reason for status change (e.g. deprecation reason)
+        createdBy:
+          type: string
+          description: User who created this asset
+        createdAt:
+          format: date-time
+          type: string
+          description: Asset creation timestamp
+        lastModifiedAt:
+          format: date-time
+          type: string
+          description: Last modification timestamp
+        lastModifiedBy:
+          type: string
+          description: User who last modified this asset
+      required:
+        - id
+        - schemaType
+        - schema
+        - group
+        - tags
+        - files
+        - tenant
+        - status
+        - createdBy
+        - createdAt
+        - lastModifiedAt
+        - lastModifiedBy
+    UpdateAsset:
+      type: object
+      properties:
+        group:
+          type: string
+          description: Asset group (image, video, document, etc.)
+        description:
+          type: string
+          description: Human-readable description of the asset instance
+        tags:
+          description: Asset tags for categorization
+          type: array
+          items:
+            type: string
+        reason:
+          type: string
+          description: Reason for status change (e.g. deprecation reason)
+        files:
+          description: Asset files with upload URLs
+          allOf:
+            - $ref: "#/components/schemas/AssetFilesInput"
+      required:
+        - group
+        - tags
+        - files
+    ChangeAssetStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - PENDING
+            - READY
+            - FAILED
+            - DEPRECATED
+          description: New asset status
+        reason:
+          type: string
+          description: Reason for status change
+      required:
+        - status

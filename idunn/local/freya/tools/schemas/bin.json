@@ -1,0 +1,30 @@
+{
+  "type": "bin",
+  "description": "Binary file used for raw data transfer or other low-level payloads",
+  "group": "data",
+  "tags": [
+    "binary",
+    "raw"
+  ],
+  "version": "1.0.0",
+  "status": "PUBLISHED",
+  "schema": {
+    "inputs": [
+      {
+        "id": "master",
+        "description": "Master raw binary file",
+        "required": true,
+        "isMaster": true,
+        "isPreview": false,
+        "allowedMimeTypes": [
+          "application/octet-stream"
+        ],
+        "tags": [
+          "master",
+          "binary"
+        ]
+      }
+    ],
+    "variations": []
+  }
+}

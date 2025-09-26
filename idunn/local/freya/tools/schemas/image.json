@@ -1,0 +1,203 @@
+{
+  "type": "image",
+  "description": "High-resolution image with multiple scaled variations for different display contexts",
+  "group": "image",
+  "tags": [
+    "image",
+    "media",
+    "high-res"
+  ],
+  "version": "1.0.0",
+  "status": "PUBLISHED",
+  "schema": {
+    "inputs": [
+      {
+        "id": "master",
+        "description": "High-resolution master image file",
+        "required": true,
+        "isMaster": true,
+        "isPreview": false,
+        "allowedMimeTypes": [
+          "image/jpeg",
+          "image/png",
+          "image/webp",
+          "image/tiff",
+          "image/bmp"
+        ],
+        "tags": [
+          "master",
+          "source",
+          "image"
+        ],
+        "properties": [
+          {
+            "name": "width",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "height",
+            "type": "number",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "variations": [
+      {
+        "id": "1080h",
+        "description": "1080px height scaled down image in AVIF format for desktop displays",
+        "allowedMimeTypes": [
+          "image/avif"
+        ],
+        "required": true,
+        "autogen": false,
+        "sourceInputIds": [
+          "master"
+        ],
+        "isPreview": false,
+        "tags": [
+          "scaled",
+          "1080p"
+        ],
+        "properties": [
+          {
+            "name": "width",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "height",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "aspectRatio",
+            "type": "number",
+            "required": true
+          }
+        ]
+      },
+      {
+        "id": "720h",
+        "description": "720px height scaled down image in AVIF format for tablet displays",
+        "allowedMimeTypes": [
+          "image/avif"
+        ],
+        "required": true,
+        "autogen": false,
+        "sourceInputIds": [
+          "master"
+        ],
+        "isPreview": false,
+        "tags": [
+          "scaled",
+          "720p"
+        ],
+        "properties": [
+          {
+            "name": "width",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "height",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "aspectRatio",
+            "type": "number",
+            "required": true
+          }
+        ]
+      },
+      {
+        "id": "480h",
+        "description": "480px height scaled down image in AVIF format for mobile displays",
+        "allowedMimeTypes": [
+          "image/avif"
+        ],
+        "required": true,
+        "autogen": false,
+        "sourceInputIds": [
+          "master"
+        ],
+        "isPreview": false,
+        "tags": [
+          "scaled",
+          "480p"
+        ],
+        "properties": [
+          {
+            "name": "width",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "height",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "aspectRatio",
+            "type": "number",
+            "required": true
+          }
+        ]
+      },
+      {
+        "id": "150h",
+        "description": "150px height thumbnail in AVIF format for NodeGraphEditor preview",
+        "allowedMimeTypes": [
+          "image/avif"
+        ],
+        "required": false,
+        "autogen": false,
+        "sourceInputIds": [
+          "master"
+        ],
+        "isPreview": false,
+        "tags": [
+          "thumbnail",
+          "node-editor",
+          "avif"
+        ],
+        "properties": [
+          {
+            "name": "width",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "height",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "aspectRatio",
+            "type": "number",
+            "required": true
+          }
+        ]
+      },
+      {
+        "id": "previewImage",
+        "description": "Preview image for user display (optional, only for specific nodes)",
+        "allowedMimeTypes": [
+          "image/avif",
+          "image/webp"
+        ],
+        "required": false,
+        "autogen": false,
+        "sourceInputIds": [
+          "master"
+        ],
+        "isPreview": true,
+        "tags": [
+          "preview"
+        ]
+      }
+    ]
+  }
+}

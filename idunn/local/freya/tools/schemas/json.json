@@ -1,0 +1,33 @@
+{
+  "type": "json",
+  "description": "JSON data file for structured data and configuration",
+  "group": "data",
+  "tags": [
+    "json",
+    "data",
+    "structured"
+  ],
+  "version": "1.0.0",
+  "status": "PUBLISHED",
+  "schema": {
+    "inputs": [
+      {
+        "id": "master",
+        "description": "Master JSON data file",
+        "required": true,
+        "isMaster": true,
+        "isPreview": false,
+        "allowedMimeTypes": [
+          "application/json",
+          "text/json"
+        ],
+        "tags": [
+          "master",
+          "data",
+          "json"
+        ]
+      }
+    ],
+    "variations": []
+  }
+}

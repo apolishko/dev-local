@@ -1,0 +1,31 @@
+{
+  "type": "mp4",
+  "description": "Basic MP4 video file for template integration and media content",
+  "group": "video",
+  "tags": [
+    "video",
+    "media",
+    "mp4"
+  ],
+  "version": "1.0.0",
+  "status": "PUBLISHED",
+  "schema": {
+    "inputs": [
+      {
+        "id": "master",
+        "description": "Master MP4 video file",
+        "required": true,
+        "isMaster": true,
+        "allowedMimeTypes": [
+          "video/mp4"
+        ],
+        "tags": [
+          "master",
+          "video",
+          "mp4"
+        ]
+      }
+    ],
+    "variations": []
+  }
+}

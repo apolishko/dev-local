@@ -1,0 +1,31 @@
+{
+  "type": "alv",
+  "description": "ALV custom format file for internal configuration or specialized data or whatever [todo]",
+  "group": "data",
+  "tags": [
+    "alv",
+    "custom",
+    "config"
+  ],
+  "version": "1.0.0",
+  "status": "PUBLISHED",
+  "schema": {
+    "inputs": [
+      {
+        "id": "master",
+        "description": "Master ALV file",
+        "required": true,
+        "isMaster": true,
+        "isPreview": false,
+        "allowedMimeTypes": [
+          "application/octet-stream"
+        ],
+        "tags": [
+          "master",
+          "alv"
+        ]
+      }
+    ],
+    "variations": []
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "type": "font",
+  "description": "[TODO] Font upload with support for multiple style variations (regular, bold, etc)",
+  "group": "font",
+  "tags": [
+    "font",
+    "typography",
+    "text"
+  ],
+  "version": "1.0.0",
+  "status": "PUBLISHED",
+  "schema": {
+    "inputs": [
+      {
+        "id": "master",
+        "description": "Master font (any variant) [todo]",
+        "required": true,
+        "isMaster": true,
+        "isPreview": false,
+        "allowedMimeTypes": [
+          "font/ttf",
+          "font/otf"
+        ],
+        "tags": [
+          "font",
+          "master"
+        ]
+      }
+    ],
+    "variations": [
+      {
+        "id": "regular",
+        "description": "Regular font variant",
+        "required": true,
+        "autogen": false,
+        "allowedMimeTypes": [
+          "font/ttf",
+          "font/otf"
+        ],
+        "tags": [
+          "font",
+          "regular"
+        ]
+      },
+      {
+        "id": "bold",
+        "description": "Bold font variant",
+        "required": true,
+        "autogen": false,
+        "allowedMimeTypes": [
+          "font/ttf",
+          "font/otf"
+        ],
+        "tags": [
+          "font",
+          "bold"
+        ]
+      },
+      {
+        "id": "italic",
+        "description": "Italic font variant",
+        "required": true,
+        "autogen": false,
+        "allowedMimeTypes": [
+          "font/ttf",
+          "font/otf"
+        ],
+        "tags": [
+          "font",
+          "italic"
+        ]
+      },
+      {
+        "id": "boldItalic",
+        "description": "Bold Italic font variant",
+        "required": false,
+        "autogen": false,
+        "allowedMimeTypes": [
+          "font/ttf",
+          "font/otf"
+        ],
+        "tags": [
+          "font",
+          "boldItalic"
+        ]
+      },
+      {
+        "id": "light",
+        "description": "Light font variant",
+        "required": false,
+        "autogen": false,
+        "allowedMimeTypes": [
+          "font/ttf",
+          "font/otf"
+        ],
+        "tags": [
+          "font",
+          "light"
+        ]
+      },
+      {
+        "id": "thin",
+        "description": "Thin font variant",
+        "required": false,
+        "autogen": false,
+        "allowedMimeTypes": [
+          "font/ttf",
+          "font/otf"
+        ],
+        "tags": [
+          "font",
+          "thin"
+        ]
+      },
+      {
+        "id": "black",
+        "description": "Black font variant",
+        "required": false,
+        "autogen": false,
+        "allowedMimeTypes": [
+          "font/ttf",
+          "font/otf"
+        ],
+        "tags": [
+          "font",
+          "black"
+        ]
+      }
+    ]
+  }
+}
