@@ -1,0 +1,119 @@
+Задача: Partial Career Match – Implementation Prompt (Backend)
+
+Предистория - общение в слаке.
+
+- Amy Green
+Great Questions!  And yes, you are correct!
+For Choose Your Future Turns, first we show the player two career clusters, and they choose one. The two we show them is pre-determined (this part of CYF doesn't require any data.)
+Once they've chosen their preferred Career Cluster out of the 2, we show them three jobs from within the Career Cluster they chose. (These jobs should be represented with tokens on the map at the end of forked paths - or they can surround a single branch of a path - in a cul-de-sac formation.)  We will use the data we have collected so far from the player to choose what three jobs to show them. We should be showing them their top 3 matches within this particular Career Cluster. (We will use the data from their personal lore turns and the deal-breaker and eliminated course filtering to choose the top 3 jobs to show to them.)
+For the info needed on all jobs we can refer to the Job Overview Scroll Info tab of the Dummy Data document. Column D lists where each piece of data can be found. (I have started a "final data" folder in the shared drive so if it would be helpful, I can pull each of the sheets that referenced in Column D into a subfolder that is called "job overview scrolls data" and everyone can ask me and probably @Ludz their questions about the data overall.
+
+- Я
+For “Partial Career Matching” we understand it like this:
+When the player picks a Career Cluster in the “Choose Your Future” turn, we run the same matching algorithm as in final matching — but only using the answers they’ve given so far, and only for careers inside that selected cluster, applying the same deal-breaker and eliminated course filters.
+Then we return the top N matches (default 3) without saving anything to DB or finalizing the assessment.
+If that’s correct, we’ll need a new endpoint for this. Can you confirm?
+
+
+- Марк (архитектор)
+the career match "logic" at this point is just a SQL query, correct? I assume you then save the final results of that query to the career_match table once the assessment is marked complete. So I agree that we can just run the matching query and not save it to the DB for the partial results.
+We should have parameters to filter the partial results by ClusterID, and a Top-N, but we should return all the rows by default, just incase we come up with another use case, like the teacher might was to see the all partial results for a student that never completed the full assessment.
+
+- Я
+Got it — so we just run the current matching SQL without saving, add optional clusterId and topN params, default to all results. Sounds clear.
+
+
+
+
+Мое видение решения задачи:
+- Owner: Backend (Spring Boot + jOOQ + PostgreSQL)
+- Goal: Implement a read‑only API endpoint that returns preview career matching results for a given assessment, computed from already saved answers, without writing to the DB or finalizing the assessment.
+- Context: Used by “Choose Your Future” turn to show top careers within a selected
+- Career Cluster based on answers so far.
+- Non‑Goals: No caching, no persistence.
+
+1. Endpoint
+
+GET /api/match/preview
+
+assessmentId (required, long)
+
+clusterCode (optional, string)
+
+topN (optional, int, min=1, max=50)
+
+2. Response
+{
+  "assessmentId": 2001,
+  "clusterCode": "STEM",
+  "results": [
+    {"careerId": 501, "careerName": "Civil Engineer", "matchScore": 0.864}
+  ]
+}
+DTOs: MatchPreviewResponse with a list of MatchPreviewItem.
+
+3. Logic
+
+- Use same formulas as final matching (Completion §1.4 Steps 2–3) but live:
+
+- Aggregate answers from question_response.
+
+- Compute normalized values.
+
+- Join with career_attribute_zscore and question_type for scoring_weight.
+
+- Apply deal‑breaker/eliminated course filter.
+
+- Filter by clusterCode and limit by topN.
+
+- No writes to student_attribute_score or career_match.
+
+4. SQL/jOOQ Approach
+
+- Single SELECT with CTEs combining:
+
+- Student Score Aggregation
+
+- Career Match Scoring
+
+Exclude careers via NOT EXISTS subquery when normalized_value = -1 and z_score_value > 1.0.
+
+5. Validation & Security
+- Validate params (topN range, clusterCode existence optional).
+- Auth: Students → own assessment; Teachers/Admin → policy.
+
+
+6. Acceptance Criteria
+
+- Matches final logic outputs when run on same data.
+
+- Empty results if no answers yet.
+
+- Correct filtering and ordering.
+
+- No persistence.
+
+Не забываем правильные коды ошибок для нового endpoint и Swagger
+
+7. Performance
+
+- CTE, indexed joins.
+
+- No caching; UX-triggered calls only.
+
+
+Приложение:
+что именно надо сделать в коде (кратко)
+задача: для /api/match/preview выполнить логику aggregateStudentAttributeScores() и calculateCareerMatches() за один поход в БД : CTE sas_live (Step 2) + career_scores (Step 3) → SELECT.
+
+план рефакторинга:
+
+
+завести новый метод сервиса, например:
+MatchPreviewResponse previewMatches(Long assessmentId, @Nullable String clusterCode, @Nullable Integer topN)
+который строит один запрос через jOOQ
+
+------
+Не забываем правильные коды ошибок для нового endpoint и Swagger
+
+
