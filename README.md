@@ -58,4 +58,7 @@ ln -s /mnt/c/Work/dev-local/idunn/local ~/work/projects/idunn/local
 /local
 ```
 
+> ----------------------------------------
 
+.\rename-with-prefix.ps1 -Folder "C:\Work\dev-local\idunn\local\features\603" -WhatIf
+.\rename-with-prefix.ps1 -Folder "C:\Work\dev-local\idunn\local\features\603"
